@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract MultiOwners {
 	mapping(address => bool) private owners;
-	uint8 ownersCount;
+	uint8 public ownersCount;
 
 	modifier onlyOwners() {
 		require(owners[msg.sender], "Only owners can call this function");
