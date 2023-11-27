@@ -21,6 +21,7 @@ contract MultiOwners {
 	}
 
 	function removeOwner(address owner) public onlyOwners {
+		require(ownersCount != 0, "Atleast one owner should own the contract");
 		owners[owner] = false;
 		ownersCount++;
 	}
