@@ -1,7 +1,8 @@
 import React from "react";
 import { AddCategoryBtn } from "./AddCategory";
 import { AddWalletBtn } from "./AddWallet";
-import { Checkbox } from "antd";
+
+// import { Checkbox } from "antd";
 
 const WalletHeader = () => {
   return (
@@ -10,7 +11,7 @@ const WalletHeader = () => {
         <AddWalletBtn onSubmit={{ fn: data => console.log("I ws clicked", data) }} />
         <AddCategoryBtn onSubmit={{ fn: data => console.log("I ws clicked", data) }} />
       </div>
-      <Checkbox.Group
+      {/* <Checkbox.Group
         options={[
           {
             label: "hide empty wallets",
@@ -25,7 +26,7 @@ const WalletHeader = () => {
             value: "hide unsupported tokens",
           },
         ]}
-      />
+      /> */}
     </div>
   );
 };

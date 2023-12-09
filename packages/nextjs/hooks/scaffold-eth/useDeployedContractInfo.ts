@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useIsMounted } from "usehooks-ts";
 import * as chains from "viem/chains";
 import { usePublicClient } from "wagmi";
-import scaffoldConfig from "~~/scaffold.config";
 import { Contract, ContractCodeStatus, ContractName, contracts } from "~~/utils/scaffold-eth/contract";
 
 /**
@@ -14,11 +13,13 @@ export const useDeployedContractInfo = <TContractName extends ContractName>(
   contractName: "Sender" | "Receiver",
   targetNetwork?: chains.Chain,
 ) => {
-  targetNetwork = targetNetwork ?? scaffoldConfig.targetNetwork;
+  targetNetwork = targetNetwork;
   const isMounted = useIsMounted();
-  const deployedContract = contracts?.[targetNetwork.id]?.[contractName as ContractName] as Contract<TContractName>;
+  const deployedContract = targetNetwork
+    ? (contracts?.[targetNetwork.id]?.[contractName as ContractName] as Contract<TContractName>)
+    : null;
   const [status, setStatus] = useState<ContractCodeStatus>(ContractCodeStatus.LOADING);
-  const publicClient = usePublicClient({ chainId: targetNetwork.id }); //configured to use current network as opposed to scaffold config
+  const publicClient = usePublicClient({ chainId: targetNetwork?.id }); //configured to use current network as opposed to scaffold config
   // const publicClient = usePublicClient({ chainId: scaffoldConfig.targetNetwork.id });
 
   useEffect(() => {

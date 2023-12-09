@@ -4,7 +4,11 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { isAddress } from "viem";
 import { hardhat } from "viem/chains";
 import { useEnsAvatar, useEnsName } from "wagmi";
-import { CheckCircleIcon, DocumentDuplicateIcon } from "@heroicons/react/24/outline";
+import {
+  CheckCircleIcon,
+  DocumentDuplicateIcon,
+  ArrowTopRightOnSquareIcon as LinkIcon,
+} from "@heroicons/react/24/outline";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { getBlockExplorerAddressLink, getTargetNetwork } from "~~/utils/scaffold-eth";
 
@@ -106,20 +110,25 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
           aria-hidden="true"
         />
       ) : (
-        <CopyToClipboard
-          text={address}
-          onCopy={() => {
-            setAddressCopied(true);
-            setTimeout(() => {
-              setAddressCopied(false);
-            }, 800);
-          }}
-        >
-          <DocumentDuplicateIcon
-            className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
-            aria-hidden="true"
-          />
-        </CopyToClipboard>
+        <div className="flex gap-1">
+          <a target="_blank" href={`https://debank.com/profile/${address}`} rel="noopener noreferrer">
+            <LinkIcon className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer" aria-hidden="true" />
+          </a>
+          <CopyToClipboard
+            text={address}
+            onCopy={() => {
+              setAddressCopied(true);
+              setTimeout(() => {
+                setAddressCopied(false);
+              }, 800);
+            }}
+          >
+            <DocumentDuplicateIcon
+              className="ml-1.5 text-xl font-normal text-sky-600 h-5 w-5 cursor-pointer"
+              aria-hidden="true"
+            />
+          </CopyToClipboard>
+        </div>
       )}
     </div>
   );

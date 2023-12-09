@@ -10,13 +10,13 @@ export const AddWalletTabs: React.FC<{ onClose: () => void }> = ({ onClose }) =>
     <Tabs
       items={[
         { key: "Create CCIP Wallet", label: "Create CCIP Wallet", children: <CreateCCIPWallet onClose={onClose} /> },
-        { key: "Add Existing Wallet", label: "Add Existing Wallet", children: <AddExistingWallet /> },
+        // { key: "Add Existing Wallet", label: "Add Existing Wallet", children: <AddExistingWallet /> },
       ]}
     />
   );
 };
 
-const AddExistingWallet = () => {
+export const AddExistingWallet = () => {
   const [dataForm] = Form.useForm();
 
   return (
@@ -37,7 +37,7 @@ const AddExistingWallet = () => {
     </Form>
   );
 };
-const CreateCCIPWallet: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+export const CreateCCIPWallet: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [dataForm] = Form.useForm();
   const { chain } = useNetwork();
   const selectedChain = DEFAULT_WALLET_CHAINS.find(item => item.networkId === `${chain?.id}`);

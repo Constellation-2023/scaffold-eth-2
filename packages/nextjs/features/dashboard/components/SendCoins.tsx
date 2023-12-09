@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { DEFAULT_WALLET_CHAINS } from "../constants";
 import { useSendTokensCrossChain } from "./WalletDetails";
 import { Form, Input, InputNumber, Modal, Select, Skeleton } from "antd";
@@ -6,6 +5,11 @@ import { Button } from "antd";
 import { useNetwork } from "wagmi";
 import { TxReceipt } from "~~/components/scaffold-eth";
 import { TModalProps } from "~~/types/general";
+import {
+  generalValidationRules,
+  numberInputValidationRules,
+  textInputValidationRules,
+} from "~~/utils/formHelpers/validation";
 
 enum EAddCategoryFormItemName {
   comment = "comment",
@@ -24,23 +28,15 @@ export const SendCoins: React.FC<TProps> = ({ open, onClose, selectedChain, cont
   const { form, setForm, onSubmit, isLoading, deployedContractLoading, displayedTxResult, setDisplayedTxResult } =
     useSendTokensCrossChain({ deployedContractAddress: contractAddress });
 
-  useEffect(() => {
-    setForm(form => ({
-      ...form,
-      _destinationChainSelector: selectedChain,
-    }));
-  }, [selectedChain, setForm]);
-  const handleForm = (key: string, value: string | number | null) => {
-    console.log(key, value);
-    setForm(prev => ({ ...prev, [key]: value }));
-  };
   const handleCancel = () => {
     setForm({});
     setDisplayedTxResult(undefined);
     onClose();
   };
+  const handleSubmit = () => {
+    onSubmit();
+  };
   const { chain: currentConnentedChain } = useNetwork();
-  console.log(form, "WHY");
   return (
     <Modal
       title="Send Coins"
@@ -69,31 +65,38 @@ export const SendCoins: React.FC<TProps> = ({ open, onClose, selectedChain, cont
         },
       }}
       footer={
-        <div className="flex gap-4 justify-end">
+        <div className="flex justify-end gap-4">
           <Button onClick={handleCancel}>Cancel</Button>
-          <Button
-            type="primary"
-            onClick={() => dataForm.submit()}
-            style={{ background: "#5E5ADB" }}
-            loading={isLoading}
-          >
-            Send
-          </Button>
+
+          {Object.values(form).length !== 5 && <Button onClick={() => dataForm.submit()}>Create</Button>}
+          {Object.values(form).length === 5 && (
+            <Button onClick={handleSubmit} loading={isLoading}>
+              Ok, Proceed
+            </Button>
+          )}
         </div>
       }
     >
       <Skeleton loading={deployedContractLoading} active paragraph={{ rows: 14 }}>
         <div className="flex-grow basis-0">{displayedTxResult ? <TxReceipt txResult={displayedTxResult} /> : null}</div>
         <Form
+          disabled={Object.values(form).length === 5}
+          initialValues={{ _destinationChainSelector: selectedChain }}
           form={dataForm}
+          onFinish={data => {
+            setForm(() => ({
+              _destinationChainSelector: selectedChain,
+              _receiver: data?._receiver,
+              _text: data?._text,
+              _token: data?._token,
+              _amount: BigInt(Math.round(Number(+data?._amount) * 10 ** 18)),
+            }));
+          }}
           labelCol={{ span: 24 }}
           requiredMark={false}
-          onFinish={() => {
-            onSubmit();
-          }}
         >
-          <Form.Item label="Receiver Address" rules={[{ required: true }]}>
-            <Input placeholder="receiver" onChange={e => handleForm("_receiver", e.target.value)} />
+          <Form.Item label="Receiver Address" name="_receiver" rules={textInputValidationRules}>
+            <Input placeholder="receiver" onChange={e => setForm(prev => ({ ...prev, _receiver: e.target.value }))} />
           </Form.Item>
           <Form.Item
             label="Transaction Details"
@@ -106,7 +109,7 @@ export const SendCoins: React.FC<TProps> = ({ open, onClose, selectedChain, cont
                   className="w-2 h-2 rounded-full bg-green-500"
                   style={{ background: "#14804A", width: "0.5rem", height: "0.5rem" }}
                 />
-                <span>to: {form["_receiver"]}</span>
+                <span>to: {dataForm.getFieldValue("_receiver")}</span>
               </div>
             }
           >
@@ -129,11 +132,10 @@ export const SendCoins: React.FC<TProps> = ({ open, onClose, selectedChain, cont
                   }))}
                 />
               </Form.Item>
-              <Form.Item noStyle>
+              <Form.Item noStyle name="_token" rules={generalValidationRules}>
                 <Select
                   placeholder="Select Coin"
                   style={{ width: "25%" }}
-                  onSelect={val => handleForm("_token", val)}
                   options={DEFAULT_WALLET_CHAINS.find(
                     item => item.networkId === `${currentConnentedChain?.id as number}`,
                   )?.ccipTokenLanes?.[selectedChain]?.supportedTokens.map(token => ({
@@ -142,22 +144,13 @@ export const SendCoins: React.FC<TProps> = ({ open, onClose, selectedChain, cont
                   }))}
                 />
               </Form.Item>
-              <Form.Item noStyle>
-                <InputNumber
-                  style={{ width: "65%" }}
-                  placeholder="Amount"
-                  onChange={value => handleForm("_amount", +`${Math.round(Number(value) * 10 ** 18)}`)}
-                />
+              <Form.Item noStyle name="_amount" rules={numberInputValidationRules}>
+                <InputNumber style={{ width: "65%" }} placeholder="Amount" />
               </Form.Item>
             </Input.Group>
           </Form.Item>
-          <Form.Item label="Comment (optional)">
-            <Input.TextArea
-              placeholder="Write Here ...."
-              rows={3}
-              value={form["_text"]}
-              onChange={value => handleForm("_text", value.target.value?.toString())}
-            />
+          <Form.Item label="Comment" name="_text" rules={textInputValidationRules}>
+            <Input.TextArea placeholder="Write Here ...." rows={3} value={form["_text"]} />
           </Form.Item>
         </Form>
       </Skeleton>

@@ -3,7 +3,6 @@ import { Wallet } from "@prisma/client";
 import NextAuth, { type DefaultSession, type NextAuthOptions } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
 import GithubProvider from "next-auth/providers/github";
-import TwitterProvider from "next-auth/providers/twitter";
 import { prisma } from "~~/config/database";
 import ENV from "~~/config/enviroment";
 
@@ -29,6 +28,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt", //specify jwt as by default with adapter its set to database
   },
+
   callbacks: {
     jwt: async ({ token }) => {
       const user = await prisma.user.findFirst({
@@ -73,11 +73,6 @@ export const authOptions: NextAuthOptions = {
   },
   secret: ENV.NEXTAUTH_SECRET,
   providers: [
-    TwitterProvider({
-      clientId: ENV.TWITTER_CLIENT_ID,
-      clientSecret: ENV.TWITTER_CLIENT_SECRET,
-      version: "2.0",
-    }),
     GithubProvider({
       clientId: ENV.GITHUB_CLIENT_ID,
       clientSecret: ENV.GITHUB_CLIENT_SECRET,

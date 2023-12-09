@@ -4,8 +4,7 @@ import { TWalletChainData } from "../types";
 import { SendCoins } from "./SendCoins";
 import { SendMessage } from "./SendMessage";
 import { Abi, AbiFunction } from "abitype";
-import { Avatar, Form, Input, Modal, Segmented, Select, Typography } from "antd";
-import moment from "moment";
+import { Form, Input, Modal, Segmented, Select } from "antd";
 import { TransactionReceipt } from "viem";
 import { useContractRead, useContractWrite, useNetwork, useWaitForTransaction } from "wagmi";
 import { getInitialFormState, getParsedContractFunctionArgs, getParsedError } from "~~/components/scaffold-eth";
@@ -18,7 +17,7 @@ type TProps = TModalProps & TWalletDetailProps;
 const WalletDetails: React.FC<TProps> = ({ onClose, open, address, data }) => {
   return (
     <Modal
-      title="Wallet Details"
+      title={data?.name}
       style={{ top: 20 }}
       open={open}
       onCancel={onClose}
@@ -51,11 +50,11 @@ const WalletDetails: React.FC<TProps> = ({ onClose, open, address, data }) => {
     </Modal>
   );
 };
-const WalletInsights: React.FC<TWalletDetailProps> = ({ address, data }) => {
+const WalletInsights: React.FC<TWalletDetailProps> = ({ address }) => {
   return (
     <div className="flex flex-col gap-6">
       <Input value={address} disabled />
-      <div className="px-4 py-4  border-black border flex gap-6">
+      {/* <div className="px-4 py-4  border-black border flex gap-6">
         <Avatar src="" size={80} />
         <div className="flex flex-col gap-4">
           <Typography.Title level={5}>
@@ -84,7 +83,7 @@ const WalletInsights: React.FC<TWalletDetailProps> = ({ address, data }) => {
             </Avatar.Group>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
@@ -143,6 +142,38 @@ export const useSendMessageCrossChain = ({ deployedContractAddress }: { deployed
     setTxValue,
   };
 };
+export const useGetDeployedWalletOwnerCount = ({ deployedContractAddress }: { deployedContractAddress: string }) => {
+  const { chain } = useNetwork();
+
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(
+    "Wallet" as any,
+    chain,
+  );
+  const abiFunction = (deployedContractData?.abi as unknown as AbiFunction[])?.find(
+    item => item.name === "ownersCount",
+  ) as unknown as AbiFunction;
+  const {
+    data: result,
+    isFetching,
+    isError,
+    refetch,
+  } = useContractRead({
+    address: deployedContractAddress,
+    functionName: abiFunction?.name,
+    abi: [abiFunction] as Abi,
+    onError: error => {
+      notification.error(error.message);
+    },
+  });
+
+  return {
+    result: result as string,
+    deployedContractLoading,
+    isFetching,
+    refetch,
+    isError,
+  };
+};
 export const useGetDeployedWallets = () => {
   const { chain } = useNetwork();
 
@@ -171,6 +202,118 @@ export const useGetDeployedWallets = () => {
     deployedContractLoading,
     isFetching,
     refetch,
+  };
+};
+export const useRemoveOwnerFromDeployedWallet = ({ deployedContractAddress }: { deployedContractAddress: string }) => {
+  const [txValue, setTxValue] = useState<string | bigint>("");
+  const writeTxn = useTransactor();
+  const { chain } = useNetwork();
+
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(
+    "Wallet" as any,
+    chain,
+  );
+  const abiFunction = (deployedContractData?.abi as unknown as AbiFunction[])?.find(
+    item => item.name === "removeOwner",
+  ) as unknown as AbiFunction;
+  const [form, setForm] = useState<Record<string, any>>(() => (abiFunction ? getInitialFormState(abiFunction) : {}));
+  const {
+    data: result,
+    isLoading,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
+    address: deployedContractAddress,
+    functionName: abiFunction?.name,
+    abi: [abiFunction] as Abi,
+    args: getParsedContractFunctionArgs(form),
+  });
+
+  const onSubmit = async () => {
+    if (writeAsync) {
+      try {
+        const makeWriteWithParams = () => writeAsync({ value: BigInt(txValue) });
+        await writeTxn(makeWriteWithParams);
+      } catch (e: any) {
+        const message = getParsedError(e);
+        notification.error(message);
+      }
+    }
+  };
+  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
+  const { data: txResult } = useWaitForTransaction({
+    hash: result?.hash,
+  });
+  useEffect(() => {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
+
+  return {
+    onSubmit,
+    deployedContractLoading,
+    isLoading,
+    displayedTxResult,
+    setDisplayedTxResult,
+    setForm,
+    setTxValue,
+    form,
+    isSuccess,
+  };
+};
+export const useAddOwnerToDeployedWallet = ({ deployedContractAddress }: { deployedContractAddress: string }) => {
+  const [txValue, setTxValue] = useState<string | bigint>("");
+  const writeTxn = useTransactor();
+  const { chain } = useNetwork();
+
+  const { data: deployedContractData, isLoading: deployedContractLoading } = useDeployedContractInfo(
+    "Wallet" as any,
+    chain,
+  );
+  const abiFunction = (deployedContractData?.abi as unknown as AbiFunction[])?.find(
+    item => item.name === "addOwner",
+  ) as unknown as AbiFunction;
+  const [form, setForm] = useState<Record<string, any>>(() => (abiFunction ? getInitialFormState(abiFunction) : {}));
+  const {
+    data: result,
+    isLoading,
+    writeAsync,
+    isSuccess,
+  } = useContractWrite({
+    address: deployedContractAddress,
+    functionName: abiFunction?.name,
+    abi: [abiFunction] as Abi,
+    args: getParsedContractFunctionArgs(form),
+  });
+
+  const onSubmit = async () => {
+    if (writeAsync) {
+      try {
+        const makeWriteWithParams = () => writeAsync({ value: BigInt(txValue) });
+        await writeTxn(makeWriteWithParams);
+      } catch (e: any) {
+        const message = getParsedError(e);
+        notification.error(message);
+      }
+    }
+  };
+  const [displayedTxResult, setDisplayedTxResult] = useState<TransactionReceipt>();
+  const { data: txResult } = useWaitForTransaction({
+    hash: result?.hash,
+  });
+  useEffect(() => {
+    setDisplayedTxResult(txResult);
+  }, [txResult]);
+
+  return {
+    onSubmit,
+    deployedContractLoading,
+    isLoading,
+    displayedTxResult,
+    setDisplayedTxResult,
+    setForm,
+    setTxValue,
+    form,
+    isSuccess,
   };
 };
 export const useAllowlistDestinationChain = ({ deployedContractAddress }: { deployedContractAddress: string }) => {

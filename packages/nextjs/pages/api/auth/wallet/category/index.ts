@@ -24,8 +24,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) 
     });
     res.status(200).json({ data: category });
   } else {
+    const query = req.query;
+    const { userId } = query;
     // Handle any other HTTP method
     const categories = await prisma.walletCategory.findMany({
+      where: {
+        userId: userId as string | undefined,
+      },
       include: {
         wallets: true,
       },

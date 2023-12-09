@@ -14,8 +14,8 @@ type MetaHeaderProps = {
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
 
 export const MetaHeader = ({
-  title = "Scaffold-ETH 2 App",
-  description = "Built with 🏗 Scaffold-ETH 2",
+  title = "Bankxpert",
+  description = "Our project is a hub for your crypto wallets. We want to make the blockchain even more transparent, so we see great potential in designating payments as a functionality in the blockchain. This will not only assist public and charitable companies in conducting public financial reporting but also justify the use of CCIP in the project.",
   image = "thumbnail.jpg",
   twitterCard = "summary_large_image",
   children,

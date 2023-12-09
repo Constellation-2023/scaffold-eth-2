@@ -1,8 +1,8 @@
 import { DUMMY_WALLET_CHAIN_DATA } from "./dummy-data";
-import { ArbitrumIcon } from "~~/components/assets/ArbitrumIcon";
+import { GeorliIcon } from "~~/components/assets/GeorliIcon";
+import { OptimismIcon } from "~~/components/assets/OptimismIcon";
 import { PolygonIcon } from "~~/components/assets/PolygonIcon";
 import { SepoliaIcon } from "~~/components/assets/SepoliaIcon";
-import { TetherIcon } from "~~/components/assets/TetherIcon";
 
 export const DEFAULT_WALLET_CHAINS: {
   key: string;
@@ -67,7 +67,7 @@ export const DEFAULT_WALLET_CHAINS: {
     chainId: "2664363617261496610",
     name: "Optimism Goerli",
     networkId: "420",
-    icon: <TetherIcon />, //TODO: Get the proper icons for networks
+    icon: <OptimismIcon />, //TODO: Get the proper icons for networks
     router: "0xeb52e9ae4a9fb37172978642d4c141ef53876f26",
     linkAddress: "0xdc2CC710e42857672E7907CF474a69B63B93089f",
     ccipTokenLanes: {
@@ -113,7 +113,7 @@ export const DEFAULT_WALLET_CHAINS: {
     chainId: "12532609583862916517",
     name: "Mumbai",
     networkId: "80001",
-    icon: <ArbitrumIcon />,
+    icon: <PolygonIcon />,
     router: "0x70499c328e1e2a3c41108bd3730f6670a44595d1",
     linkAddress: "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
     ccipTokenLanes: {
@@ -160,7 +160,7 @@ export const DEFAULT_WALLET_CHAINS: {
     chainId: "14767482510784806043",
     name: "Fuji",
     networkId: "43113",
-    icon: <PolygonIcon />,
+    icon: <GeorliIcon />,
     router: "0x554472a2720e5e7d5d3c817529aba05eed5f82d8",
     linkAddress: "0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846",
     ccipTokenLanes: {
