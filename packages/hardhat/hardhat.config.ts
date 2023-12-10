@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
       // gasPrice: 225000000000,
       chainId: 43113,
       // accounts: [deployerPrivateKey],
-      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
+      accounts: [deployerPrivateKey],
     },
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
@@ -55,7 +55,7 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
+      accounts: [deployerPrivateKey],
       // accounts: [deployerPrivateKey],
     },
     goerli: {
@@ -78,7 +78,7 @@ const config: HardhatUserConfig = {
       url: `https://opt-goerli.g.alchemy.com/v2/${providerApiKey}`,
       // gasPrice: 225000000000,
       // accounts: [deployerPrivateKey],
-      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
+      accounts: [deployerPrivateKey],
     },
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,
@@ -87,7 +87,7 @@ const config: HardhatUserConfig = {
     polygonMumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${providerApiKey}`,
       // accounts: [deployerPrivateKey],
-      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
+      accounts: [deployerPrivateKey],
     },
     polygonZkEvm: {
       url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/${providerApiKey}`,
