@@ -42,6 +42,13 @@ const config: HardhatUserConfig = {
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
     },
+    fuji: {
+      url: "https://api.avax-test.network/ext/bc/C/rpc",
+      // gasPrice: 225000000000,
+      chainId: 43113,
+      // accounts: [deployerPrivateKey],
+      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
+    },
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
@@ -69,7 +76,9 @@ const config: HardhatUserConfig = {
     },
     optimismGoerli: {
       url: `https://opt-goerli.g.alchemy.com/v2/${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      // gasPrice: 225000000000,
+      // accounts: [deployerPrivateKey],
+      accounts: ["8e7139aada50211088f4dfc6a36c793183f2e80965243fdd81b2252c994d5137"],
     },
     polygon: {
       url: `https://polygon-mainnet.g.alchemy.com/v2/${providerApiKey}`,

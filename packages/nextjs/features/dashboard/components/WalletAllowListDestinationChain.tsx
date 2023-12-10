@@ -69,12 +69,12 @@ export const WalletAllowListDestinationChain: React.FC<TProps> = ({ onClose, ope
             />
           </Form.Item>
 
-          <Form.Item label="Is it Allowed?" name={"allowed"} rules={generalValidationRules}>
+          <Form.Item label="Do you wish to activate/deactivate?" name={"allowed"} rules={generalValidationRules}>
             <Select
-              placeholder="Allowed?"
+              placeholder="Do you wish to activate/deactivate?"
               options={[
-                { label: "Yes", value: true },
-                { label: "No", value: false },
+                { label: "Activate", value: true },
+                { label: "Deactivate", value: false },
               ]}
             />
           </Form.Item>
