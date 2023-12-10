@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { isAddress } from "viem";
 import { hardhat } from "viem/chains";
-import { useEnsAvatar, useEnsName } from "wagmi";
+import { useEnsAvatar, useEnsName, useNetwork } from "wagmi";
 import {
   CheckCircleIcon,
   DocumentDuplicateIcon,
@@ -38,6 +38,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
   const [addressCopied, setAddressCopied] = useState(false);
 
   const { data: fetchedEns } = useEnsName({ address, enabled: isAddress(address ?? ""), chainId: 1 });
+  const { chain } = useNetwork();
   const { data: fetchedEnsAvatar } = useEnsAvatar({
     name: fetchedEns,
     enabled: Boolean(fetchedEns),
@@ -70,7 +71,7 @@ export const Address = ({ address, disableAddressLink, format, size = "base" }: 
     return <span className="text-error">Wrong address</span>;
   }
 
-  const blockExplorerAddressLink = getBlockExplorerAddressLink(getTargetNetwork(), address);
+  const blockExplorerAddressLink = getBlockExplorerAddressLink(chain ?? getTargetNetwork(), address);
   let displayAddress = address?.slice(0, 5) + "..." + address?.slice(-4);
 
   if (ens) {
