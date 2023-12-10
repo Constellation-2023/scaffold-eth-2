@@ -81,7 +81,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/auth/login",
-    verifyRequest: "/dashboard",
+    verifyRequest: "/",
   },
 };
 export default NextAuth(authOptions);

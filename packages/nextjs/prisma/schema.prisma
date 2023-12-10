@@ -8,7 +8,8 @@ generator client {
 datasource db {
   provider = "mysql"
 
-  url      = env("DATABASE_URL")
+  // url      = env("DATABASE_URL")
+  url      = "mysql://root:gU%^&*(ijgfs12)HHH@hk-cdb-hpii8arz.sql.tencentcdb.com:63919/bankxpert3"
 }
 
 enum TestnetBlockchainSupportedType {

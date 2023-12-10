@@ -1,5 +1,5 @@
 {
-  "name": "Scaffold-ETH 2 DApp",
-  "description": "A DApp built with Scaffold-ETH",
+  "name": "Bankxpert",
+  "description": "You can get balances of all coins from all blockchain networks, as well as organize 100% Banking (operational) day for your Organization with our messaging system.",
   "iconPath": "logo.svg"
 }
