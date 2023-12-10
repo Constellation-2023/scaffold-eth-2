@@ -2,7 +2,7 @@
 
 <h4 align="center">
   <a href="https://bank-expert-ruby.vercel.app/debug">Contracts</a> |
-  <a href="https://bank-expert-ruby.vercel.app/dashboard">Web Application</a>
+  <a href="https://bank-expert-ruby.vercel.app/">Web Application</a>
 </h4>
 
 🧪 This is a banking application that enables users to create wallets(bank accounts) once authenticated. These accounts are smart contracts that use ccip to ensure that tokens and data can be sent and received cross-chain. The balances of ERC-20 tokens and native currencies held by the wallet in each chain(e.g sepolia, polygon,...) can also be seen at a glance from the list of wallets showcased by the user interface via a wallet table. The user is also capable of blocking and allowing what chains the wallet can send coins/data to via `allowDestinationChain`. These wallets also have the capabilty of being owned by multiple owners, and only said owners can perform actions like coin transfer on the wallet.
