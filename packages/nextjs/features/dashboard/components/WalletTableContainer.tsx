@@ -194,9 +194,11 @@ const WalletOwnerCount: React.FC<WalletOwnerCountProps> = ({ address }) => {
     <div suppressHydrationWarning>
       {isError ? <span>N/A</span> : null}
 
-      <Skeleton loading={isFetching} paragraph={{ rows: 1 }}>
-        {result}
-      </Skeleton>
+      {!isError ? (
+        <Skeleton loading={isFetching} paragraph={{ rows: 1 }}>
+          {result}
+        </Skeleton>
+      ) : null}
     </div>
   );
 };
@@ -211,10 +213,12 @@ const WalletBalance: React.FC<WalletBalProps> = ({ chainId, token, address, watc
     <div suppressHydrationWarning>
       {isError ? <span>N/A</span> : null}
 
-      <Skeleton loading={isLoading} paragraph={{ rows: 1 }}>
-        {(data && data?.formatted ? +data?.formatted : 0).toFixed(3)}
-        {/* {data?.symbol} */}
-      </Skeleton>
+      {!isError ? (
+        <Skeleton loading={isLoading} paragraph={{ rows: 1 }}>
+          {(data && data?.formatted ? +data?.formatted : 0).toFixed(3)}
+          {/* {data?.symbol} */}
+        </Skeleton>
+      ) : null}
     </div>
   );
 };
